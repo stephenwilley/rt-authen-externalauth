@@ -25,6 +25,7 @@ Provides the LDAP implementation for L<RT::Authen::ExternalAuth>.
 
             'server'                    =>  'server.domain.tld',
             'user'                      =>  'rt_ldap_username',
+            'usersuffix'                =>  '@domainname',    # Optional username suffix to help AD
             'pass'                      =>  'rt_ldap_password',
 
             'base'                      =>  'ou=Organisational Unit,dc=domain,dc=TLD',
@@ -80,10 +81,11 @@ documentation for details.
 
 The server hosting the LDAP or AD service.
 
-=item user, pass
+=item user, usersuffix, pass
 
 The username and password RT should use to connect to the LDAP
-server.
+server.  The usersuffix is used for AD authentication so usernames
+become of the form user@domain
 
 If you can bind to your LDAP server anonymously you shouldn't
 set these options.
@@ -590,7 +592,12 @@ sub _GetBoundLdapObj {
 
     # Figure out what's what
     my $ldap_server     = $config->{'server'};
-    my $ldap_user       = $config->{'user'};
+    my $ldap_user = '';
+    if ( $config->{'usersuffix'} ne "" ) {
+        $ldap_user      = $config->{'user'} . $config->{'usersuffix'};
+    } else {
+        $ldap_user      = $config->{'user'};
+    }
     my $ldap_pass       = $config->{'pass'};
     my $ldap_tls        = $config->{'tls'};
     my $ldap_ssl_ver    = $config->{'ssl_version'};

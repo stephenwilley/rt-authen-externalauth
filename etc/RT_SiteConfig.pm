@@ -240,6 +240,7 @@ Set($ExternalSettings, {
         'type'                      =>  'ldap',
         'server'                    =>  'server.domain.tld',
         'user'                      =>  'rt_ldap_username',
+        'usersuffix'                =>  '@domainname',  # Optional suffix that helps AD
         'pass'                    =>  'rt_ldap_password',
         'base'                      =>  'ou=Organisational Unit,dc=domain,dc=TLD',
         'filter'                    =>  '(FILTER_STRING)',
